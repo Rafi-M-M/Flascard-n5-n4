@@ -53,7 +53,7 @@
             margin-bottom: 22px;
             line-height: 1.5;
         }
-        /* --- Deck Pilihan --- */
+        /* Deck Pilihan */
         .deck-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -91,7 +91,7 @@
             display: block;
             margin-bottom: 4px;
         }
-        /* --- Mode toggle (di dalam deck) --- */
+        /* Mode toggle */
         .mode-toggle {
             display: flex;
             gap: 12px;
@@ -140,6 +140,7 @@
             align-items: center;
             gap: 24px;
             width: 100%;
+            position: relative;
         }
         .card-container {
             perspective: 1200px;
@@ -148,6 +149,7 @@
             min-height: 320px;
             cursor: pointer;
             margin: 0 auto;
+            position: relative;
         }
         .card-flipper {
             position: relative;
@@ -224,6 +226,28 @@
             left: 22px;
             font-size: 13px;
             color: #94a3b8;
+        }
+        /* Tombol penanda */
+        .mark-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 10;
+            transition: 0.2s;
+            color: #cbd5e1;
+            line-height: 1;
+            padding: 4px;
+        }
+        .mark-btn:hover {
+            transform: scale(1.15);
+        }
+        .mark-btn.active {
+            color: #fbbf24;
+            text-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
         }
         .card-nav {
             display: flex;
@@ -436,7 +460,106 @@
         .quiz-done button:hover {
             background: #2563eb;
         }
-        /* Sembunyikan konten deck saat di halaman pilihan */
+        /* Review Section */
+        .review-section {
+            margin-top: 20px;
+            padding: 20px 16px;
+            background: #f8fafc;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+        }
+        .review-section h2 {
+            font-size: 22px;
+            margin-bottom: 4px;
+            color: #0f172a;
+        }
+        .review-section p {
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        .review-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e9edf2;
+        }
+        .review-item .item-kanji {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .review-item .item-detail {
+            font-size: 15px;
+            color: #475569;
+            margin-left: 8px;
+        }
+        .review-item .remove-mark-btn {
+            background: #fee2e2;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #991b1b;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .review-item .remove-mark-btn:hover {
+            background: #fecaca;
+        }
+        .review-empty {
+            text-align: center;
+            padding: 20px;
+            color: #22c55e;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        .review-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+        }
+        .review-btn {
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .review-btn:hover {
+            background: #cbd5e1;
+        }
+        .review-btn.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .review-btn.danger:hover {
+            background: #fecaca;
+        }
+        .review-btn.primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .review-btn.primary:hover {
+            background: #2563eb;
+        }
+        /* Sembunyikan konten deck */
         .deck-content {
             display: none;
         }
@@ -487,6 +610,11 @@
             .card-face .reading {
                 font-size: 22px;
             }
+            .mark-btn {
+                font-size: 24px;
+                top: 12px;
+                right: 12px;
+            }
             .quiz-options {
                 grid-template-columns: 1fr;
                 gap: 10px;
@@ -505,6 +633,10 @@
             .quiz-sub-mode button {
                 padding: 6px 16px;
                 font-size: 13px;
+            }
+            .review-item {
+                flex-wrap: wrap;
+                gap: 6px;
             }
         }
         @media (max-width: 400px) {
@@ -545,7 +677,7 @@
         <div class="deck-grid" id="deckGrid"></div>
     </div>
 
-    <!-- Konten Deck (akan ditampilkan setelah memilih deck) -->
+    <!-- Konten Deck -->
     <div id="deckContent" class="deck-content">
         <button class="back-btn" id="backToPicker">← Kembali ke Pilihan Deck</button>
         <div class="mode-toggle" id="modeToggle">
@@ -553,6 +685,7 @@
             <button class="mode-btn" data-mode="quiz">📝 Latihan Soal</button>
         </div>
 
+        <!-- Flashcard -->
         <div id="flashcardSection">
             <div class="card-area">
                 <div class="card-container" id="cardContainer">
@@ -570,6 +703,8 @@
                             <div class="hint" id="backHint">#1</div>
                         </div>
                     </div>
+                    <!-- Tombol penanda -->
+                    <button class="mark-btn" id="markBtn" title="Tandai jika lupa">⭐</button>
                 </div>
                 <div class="card-nav">
                     <button id="prevCard">◀ Sebelum</button>
@@ -580,6 +715,7 @@
             </div>
         </div>
 
+        <!-- Quiz -->
         <div id="quizSection" style="display:none;">
             <div class="quiz-area" id="quizArea">
                 <div class="quiz-sub-mode" id="quizSubMode">
@@ -591,6 +727,18 @@
                     <span class="score" id="quizScore">✅ 0</span>
                 </div>
                 <div id="quizBody"></div>
+            </div>
+        </div>
+
+        <!-- Review Section (kanji yang ditandai) -->
+        <div id="reviewSection" class="review-section" style="display:none;">
+            <h2>📌 Kanji yang Lupa</h2>
+            <p>Klik tombol <strong>Hapus tanda</strong> jika Anda sudah menghafal.</p>
+            <div class="review-list" id="reviewList"></div>
+            <div class="review-actions">
+                <button id="clearAllMarksBtn" class="review-btn danger">🗑️ Hapus Semua Tanda</button>
+                <button id="repeatMarksBtn" class="review-btn primary">🔄 Ulangi Kanji yang Lupa</button>
+                <button id="backToFlashcardBtn" class="review-btn">← Kembali ke Flashcard</button>
             </div>
         </div>
     </div>
@@ -1190,7 +1338,9 @@
     let currentDeck = 0;
     let currentCard = 0;
     let isFlipped = false;
-    let quizSubMode = 1; // 1: Kanji→Arti, 2: Arti→Kanji
+    let quizSubMode = 1;
+    let customDeck = null; // jika tidak null, gunakan ini untuk flashcard (review)
+    let markedDecks = {}; // key: deck index, value: array of id yang ditandai
 
     // ── DOM ──
     const deckPicker = document.getElementById('deckPicker');
@@ -1209,8 +1359,14 @@
     const prevBtn = document.getElementById('prevCard');
     const nextBtn = document.getElementById('nextCard');
     const shuffleBtn = document.getElementById('shuffleBtn');
+    const markBtn = document.getElementById('markBtn');
     const flashcardSection = document.getElementById('flashcardSection');
     const quizSection = document.getElementById('quizSection');
+    const reviewSection = document.getElementById('reviewSection');
+    const reviewList = document.getElementById('reviewList');
+    const clearAllMarksBtn = document.getElementById('clearAllMarksBtn');
+    const repeatMarksBtn = document.getElementById('repeatMarksBtn');
+    const backToFlashcardBtn = document.getElementById('backToFlashcardBtn');
     const quizBody = document.getElementById('quizBody');
     const quizProgress = document.getElementById('quizProgress');
     const quizScoreEl = document.getElementById('quizScore');
@@ -1236,6 +1392,7 @@
                 currentDeck = i;
                 currentCard = 0;
                 isFlipped = false;
+                customDeck = null;
                 flipper.classList.remove('flipped');
                 showDeckContent();
             });
@@ -1248,6 +1405,8 @@
         deckContent.classList.add('active');
         // reset mode ke flashcard
         document.querySelector('#modeToggle .mode-btn[data-mode="flashcard"]').click();
+        // sembunyikan review
+        reviewSection.style.display = 'none';
         renderCard();
         initQuiz();
     }
@@ -1255,6 +1414,8 @@
     function showDeckPicker() {
         deckPicker.classList.remove('hidden');
         deckContent.classList.remove('active');
+        // reset custom
+        customDeck = null;
     }
 
     backBtn.addEventListener('click', showDeckPicker);
@@ -1262,8 +1423,12 @@
     // ═══════════════════════════════════════════════════════════════
     //  FLASHCARD
     // ═══════════════════════════════════════════════════════════════
+    function getActiveDeck() {
+        return customDeck || decks[currentDeck];
+    }
+
     function renderCard() {
-        const deck = decks[currentDeck];
+        const deck = getActiveDeck();
         if (!deck.length) {
             frontKanji.textContent = '—';
             backReading.textContent = '—';
@@ -1271,6 +1436,7 @@
             frontCounter.textContent = '0 / 0';
             backCounter.textContent = '0 / 0';
             pageInfo.textContent = '0 / 0';
+            markBtn.style.display = 'none';
             return;
         }
         const item = deck[currentCard];
@@ -1287,28 +1453,196 @@
         nextBtn.disabled = currentCard === total - 1;
         if (isFlipped) flipper.classList.add('flipped');
         else flipper.classList.remove('flipped');
+
+        // Tampilkan tombol penanda hanya jika bukan customDeck (review)
+        if (customDeck === null) {
+            markBtn.style.display = 'block';
+            updateMarkButton(item.id);
+        } else {
+            markBtn.style.display = 'none';
+        }
     }
 
-    cardContainer.addEventListener('click', () => {
-        if (decks[currentDeck].length === 0) return;
-        isFlipped = !isFlipped;
-        flipper.classList.toggle('flipped');
-    });
+    function updateMarkButton(id) {
+        const marks = markedDecks[currentDeck] || [];
+        if (marks.includes(id)) {
+            markBtn.classList.add('active');
+            markBtn.textContent = '⭐';
+        } else {
+            markBtn.classList.remove('active');
+            markBtn.textContent = '☆';
+        }
+    }
 
-    prevBtn.addEventListener('click', () => {
-        if (currentCard > 0) { currentCard--; isFlipped = false; flipper.classList.remove('flipped'); renderCard(); }
-    });
-    nextBtn.addEventListener('click', () => {
+    function toggleMark() {
+        if (customDeck !== null) return; // tidak boleh di review
         const deck = decks[currentDeck];
-        if (currentCard < deck.length - 1) { currentCard++; isFlipped = false; flipper.classList.remove('flipped'); renderCard(); }
-    });
+        if (!deck.length) return;
+        const item = deck[currentCard];
+        if (!markedDecks[currentDeck]) markedDecks[currentDeck] = [];
+        const idx = markedDecks[currentDeck].indexOf(item.id);
+        if (idx === -1) {
+            markedDecks[currentDeck].push(item.id);
+        } else {
+            markedDecks[currentDeck].splice(idx, 1);
+        }
+        updateMarkButton(item.id);
+    }
+
+    markBtn.addEventListener('click', toggleMark);
+
+    // ── Navigasi ──
+    function goToNextCard() {
+        const deck = getActiveDeck();
+        if (currentCard < deck.length - 1) {
+            currentCard++;
+            isFlipped = false;
+            flipper.classList.remove('flipped');
+            renderCard();
+        } else {
+            // sudah di kartu terakhir
+            if (customDeck !== null) {
+                // selesai review, kembali ke review
+                customDeck = null;
+                showReview();
+            } else {
+                // selesai deck normal, cek apakah ada tanda
+                const marks = markedDecks[currentDeck] || [];
+                if (marks.length > 0) {
+                    showReview();
+                } else {
+                    // tidak ada tanda, reset ke awal
+                    currentCard = 0;
+                    isFlipped = false;
+                    flipper.classList.remove('flipped');
+                    renderCard();
+                    // bisa tampilkan notifikasi ringan
+                }
+            }
+        }
+    }
+
+    function goToPrevCard() {
+        if (currentCard > 0) {
+            currentCard--;
+            isFlipped = false;
+            flipper.classList.remove('flipped');
+            renderCard();
+        }
+    }
+
+    prevBtn.addEventListener('click', goToPrevCard);
+    nextBtn.addEventListener('click', goToNextCard);
+
     shuffleBtn.addEventListener('click', () => {
+        if (customDeck !== null) return; // tidak di review
         decks[currentDeck] = shuffle(decks[currentDeck]);
         currentCard = 0;
         isFlipped = false;
         flipper.classList.remove('flipped');
         renderCard();
         initQuiz();
+    });
+
+    cardContainer.addEventListener('click', () => {
+        if (getActiveDeck().length === 0) return;
+        isFlipped = !isFlipped;
+        flipper.classList.toggle('flipped');
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    //  REVIEW
+    // ═══════════════════════════════════════════════════════════════
+    function showReview() {
+        flashcardSection.style.display = 'none';
+        quizSection.style.display = 'none';
+        reviewSection.style.display = 'block';
+        renderReviewList();
+    }
+
+    function renderReviewList() {
+        const marks = markedDecks[currentDeck] || [];
+        if (marks.length === 0) {
+            reviewList.innerHTML = `<div class="review-empty">🎉 Semua kanji sudah dihafal! Tidak ada yang lupa.</div>`;
+            repeatMarksBtn.style.display = 'none';
+            clearAllMarksBtn.style.display = 'none';
+            return;
+        }
+        repeatMarksBtn.style.display = 'inline-block';
+        clearAllMarksBtn.style.display = 'inline-block';
+        let html = '';
+        const deck = decks[currentDeck];
+        marks.forEach(id => {
+            const item = deck.find(d => d.id === id);
+            if (!item) return;
+            html += `
+                <div class="review-item">
+                    <div>
+                        <span class="item-kanji">${item.kanji}</span>
+                        <span class="item-detail">${item.reading} · ${item.meaning}</span>
+                    </div>
+                    <button class="remove-mark-btn" data-id="${item.id}">Hapus tanda</button>
+                </div>
+            `;
+        });
+        reviewList.innerHTML = html;
+
+        // Event listener hapus per item
+        reviewList.querySelectorAll('.remove-mark-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = parseInt(this.dataset.id);
+                removeMark(id);
+            });
+        });
+    }
+
+    function removeMark(id) {
+        if (!markedDecks[currentDeck]) return;
+        const idx = markedDecks[currentDeck].indexOf(id);
+        if (idx !== -1) {
+            markedDecks[currentDeck].splice(idx, 1);
+        }
+        renderReviewList();
+        // jika tidak ada tanda lagi, otomatis sembunyikan review dan kembali ke flashcard
+        if (markedDecks[currentDeck].length === 0) {
+            // setelah render ulang, akan muncul pesan kosong, tapi kita bisa langsung kembali
+            // kita biarkan user memilih kembali
+        }
+    }
+
+    clearAllMarksBtn.addEventListener('click', () => {
+        if (markedDecks[currentDeck]) {
+            markedDecks[currentDeck] = [];
+        }
+        renderReviewList();
+        // jika kosong, tetap di review dengan pesan sukses
+    });
+
+    repeatMarksBtn.addEventListener('click', () => {
+        const marks = markedDecks[currentDeck] || [];
+        if (marks.length === 0) return;
+        const deck = decks[currentDeck];
+        const filtered = marks.map(id => deck.find(d => d.id === id)).filter(Boolean);
+        if (filtered.length === 0) return;
+        customDeck = shuffle(filtered);
+        currentCard = 0;
+        isFlipped = false;
+        flipper.classList.remove('flipped');
+        reviewSection.style.display = 'none';
+        flashcardSection.style.display = 'block';
+        quizSection.style.display = 'none';
+        renderCard();
+    });
+
+    backToFlashcardBtn.addEventListener('click', () => {
+        customDeck = null;
+        currentCard = 0;
+        isFlipped = false;
+        flipper.classList.remove('flipped');
+        reviewSection.style.display = 'none';
+        flashcardSection.style.display = 'block';
+        quizSection.style.display = 'none';
+        renderCard();
     });
 
     // ═══════════════════════════════════════════════════════════════
@@ -1462,11 +1796,17 @@
             this.classList.add('active');
             const mode = this.dataset.mode;
             if (mode === 'flashcard') {
-                flashcardSection.style.display = 'block';
-                quizSection.style.display = 'none';
-                renderCard();
+                // jika sedang di review, tetap di review
+                if (reviewSection.style.display === 'block') {
+                    // tetap tampilkan review
+                } else {
+                    flashcardSection.style.display = 'block';
+                    quizSection.style.display = 'none';
+                    renderCard();
+                }
             } else {
                 flashcardSection.style.display = 'none';
+                reviewSection.style.display = 'none';
                 quizSection.style.display = 'block';
                 initQuiz();
             }
@@ -1477,7 +1817,6 @@
     //  START
     // ═══════════════════════════════════════════════════════════════
     renderDeckPicker();
-    // Tampilkan deck picker di awal
     showDeckPicker();
     console.log(`✅ Loaded ${allData.length} kanji into ${decks.length} decks (urutan PDF)`);
 </script>
